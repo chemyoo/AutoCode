@@ -1,4 +1,4 @@
-package com.chemyoo.core.processor;
+package pers.chemyoo.core.processor;
 
 import java.io.File;
 import java.io.IOException;
