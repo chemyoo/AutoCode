@@ -10,7 +10,11 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic;
+
+import pers.chemyoo.core.annotations.AutoInterface;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
@@ -19,11 +23,19 @@ public class InterfaceProcessor extends AbstractProcessor {
 	
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-		try {
-			new File("D:/abc.java").createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		if(!roundEnv.processingOver()){
+            for(Element element : roundEnv.getElementsAnnotatedWith(AutoInterface.class)){
+            	String path = element.getClass().getClassLoader().getResource("").getPath();
+                String name = element.getSimpleName().toString();
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "element name: " + name);
+                try {
+    				File file = new File(path + "/", name + "Sevrice.java");
+    				file.createNewFile();
+    			} catch (IOException e) {
+    				// ignore
+    			}
+            }
+        }
 		return false;
 	}
 
