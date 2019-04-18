@@ -1,2 +1,2 @@
-com.chemyoo.core.processor.InterfaceProcessor
-com.chemyoo.core.processor.MapperProcessor
+pers.chemyoo.core.processor.InterfaceProcessor
+pers.chemyoo.core.processor.MapperProcessor
