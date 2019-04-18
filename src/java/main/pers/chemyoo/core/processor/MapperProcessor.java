@@ -1,6 +1,7 @@
 package pers.chemyoo.core.processor;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 
@@ -27,8 +28,12 @@ public class MapperProcessor extends AbstractProcessor {
             String name = element.getSimpleName().toString();
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "element name: " + name);
             try {
-				File file = new File(path + "/", name + "Mapper.java");
-				file.createNewFile();
+				File file = new File("D:/", name + "Mapper.java");
+				FileWriter write = new FileWriter(file);
+				write.write(path);
+				write.write("\n");
+				write.write(name);
+				write.close();
 			} catch (IOException e) {
 				// ignore
 			}
