@@ -18,7 +18,7 @@ import pers.chemyoo.core.annotations.AutoInterface;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
-@SupportedAnnotationTypes({"com.chemyoo.core.annotations.AutoInterface"})
+@SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoInterface"})
 public class InterfaceProcessor extends AbstractProcessor {
 	
 	@Override

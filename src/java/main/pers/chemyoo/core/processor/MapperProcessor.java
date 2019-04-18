@@ -17,7 +17,7 @@ import pers.chemyoo.core.annotations.AutoMapper;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
-@SupportedAnnotationTypes({"com.chemyoo.core.annotations.AutoMapper"})
+@SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoMapper"})
 public class MapperProcessor extends AbstractProcessor {
 
 	@Override
