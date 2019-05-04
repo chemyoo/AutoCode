@@ -51,7 +51,7 @@ public class MapperProcessor extends AbstractProcessor {
 	}
 	
 	private String classbuilder(String name) {
-		return InitSystemConfig.readMapperTemplateAsStream().replaceAll("^{[a-zA-Z]+?}$", "<" + name + ">");
+		return InitSystemConfig.readMapperTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", name);
 	}
 	
 	public StringBuilder classbuilder(String className, String beanName, String name) {

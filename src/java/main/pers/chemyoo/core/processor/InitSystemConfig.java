@@ -3,7 +3,6 @@ package pers.chemyoo.core.processor;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Iterator;
 import java.util.Properties;
 
 import pers.chemyoo.core.logger.LogWriter;
@@ -39,30 +38,36 @@ public class InitSystemConfig {
 		}
 	}
 	
-	public static String readMapperTemplateAsStream() {
-		return readTemplateAsStream("template/mapper.tpl");
+	public static String readMapperTemplate() {
+		return readTemplate("template/mapper.tpl");
 	}
 	
-	public static String readServiceTemplateAsStream() {
-		return readTemplateAsStream("template/service.tpl");
+	public static String readServiceTemplate() {
+		return readTemplate("template/service.tpl");
 	}
 	
-	public static String readTemplateAsStream(String name) {
+	public static String readTemplate(String name) {
 		LogWriter.info("getTemplateAsStream...");
 		StringBuilder builder = new StringBuilder();
 		InputStream in = InitSystemConfig.class.getClassLoader().getResourceAsStream(name);
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));) {
 			if(bufferedReader.ready()) {
-				Iterator<String> it = bufferedReader.lines().iterator();
-				while(it.hasNext()) {
-					builder.append(it.next());
+				String line = null;
+				while((line = bufferedReader.readLine()) != null) {
+					builder.append(line).append("\r\n");
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			LogWriter.error(e.getMessage());
 		}
+		LogWriter.info(builder.toString());
 		return builder.toString();
+	}
+	
+	public static void main(String[] args) {
+		System.err.println(InitSystemConfig.readMapperTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", "HUB"));
+		System.err.println(InitSystemConfig.readServiceTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", "HUB"));
 	}
 
 }

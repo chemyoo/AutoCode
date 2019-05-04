@@ -14,7 +14,7 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
-import pers.chemyoo.core.annotations.AutoMapper;
+import pers.chemyoo.core.annotations.AutoInterface;
 import pers.chemyoo.core.logger.LogWriter;
 
 //通过注解生成文件
@@ -22,13 +22,13 @@ import pers.chemyoo.core.logger.LogWriter;
 @SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoInterface"})
 public class ServiceProcessor extends AbstractProcessor {
 
-private Properties props = InitSystemConfig.getInstance();
+	private Properties props = InitSystemConfig.getInstance();
 	
 	private static final String SUBFIX = "Service";
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-		for(Element element : roundEnv.getElementsAnnotatedWith(AutoMapper.class)) {
+		for(Element element : roundEnv.getElementsAnnotatedWith(AutoInterface.class)) {
 			String name = element.getSimpleName().toString();
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "element name: " + name);
             try {
@@ -45,7 +45,7 @@ private Properties props = InitSystemConfig.getInstance();
 	}
 	
 	private String classbuilder(String name) {
-		return InitSystemConfig.readServiceTemplateAsStream().replaceAll("^{[a-zA-Z]+?}$", "<" + name + ">");
+		return InitSystemConfig.readServiceTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", name);
 	}
 	
 }
