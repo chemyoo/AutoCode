@@ -1,8 +1,9 @@
 package pers.chemyoo.core.processor;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -13,32 +14,74 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
 
 import pers.chemyoo.core.annotations.AutoMapper;
+import pers.chemyoo.core.logger.LogWriter;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoMapper"})
 public class MapperProcessor extends AbstractProcessor {
+	
+	
+	private Properties props = InitSystemConfig.getInstance();
+	
+	private static final String LINE = "\r\n";
+	
+	private static final String SUBFIX = "Mapper";
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-		for(Element element : roundEnv.getElementsAnnotatedWith(AutoMapper.class)){
-        	String path = element.getClass().getClassLoader().getResource("").getPath();
-            String name = element.getSimpleName().toString();
+		for(Element element : roundEnv.getElementsAnnotatedWith(AutoMapper.class)) {
+			String name = element.getSimpleName().toString();
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "element name: " + name);
             try {
-				File file = new File("D:/", name + "Mapper.java");
-				FileWriter write = new FileWriter(file);
-				write.write(path);
-				write.write("\n");
-				write.write(name);
+            	String mapperName = name + SUBFIX;
+//            	FileObject fileObject = processingEnv.getFiler().createResource(StandardLocation.SOURCE_OUTPUT, props.getProperty("mapper.path"), mapperName)
+				JavaFileObject source = processingEnv.getFiler().createSourceFile(props.getProperty("mapper.path")+ "." + mapperName);
+            	Writer write = source.openWriter();
+            	write.write(this.classbuilder(name));
 				write.close();
-			} catch (IOException e) {
-				// ignore
+			} catch (Exception e) {
+				LogWriter.error(e.getMessage());
 			}
         }
 		return false;
+	}
+	
+	private String classbuilder(String name) {
+		return InitSystemConfig.readMapperTemplateAsStream().replaceAll("^{[a-zA-Z]+?}$", "<" + name + ">");
+	}
+	
+	public StringBuilder classbuilder(String className, String beanName, String name) {
+		StringBuilder builder = new StringBuilder();
+		String pkg = props.getProperty("mapper.path");
+		if (pkg == null) {
+			throw new RuntimeException("can not find property 'mapper.path' in file which name is config.properties");
+		}
+		builder.append("package ").append(pkg).append(";").append(LINE).append(LINE);
+		List<String> imports = new ArrayList<>();
+		String superClass = props.getProperty("mapper.super.class"); 
+		if (superClass == null) {
+			throw new RuntimeException("can not find property 'mapper.super.class' in file which name is config.properties");
+		}
+		int indexof = superClass.lastIndexOf('.');
+		imports.add(superClass);
+		imports.add(className);
+		for(String im : imports) {
+			builder.append("import ").append(im).append(";").append(LINE);
+		}
+		String gentherClass = props.getProperty("mapper.genther.class");
+		builder.append(LINE);
+		builder.append("public interface ").append(beanName).append(" extends ");
+		builder.append(superClass.substring(indexof + 1));
+		if(gentherClass != null && !gentherClass.isEmpty()) {
+			builder.append(gentherClass.replaceAll("^<[A-Z]>$", "<" + name + ">"));
+		}
+		builder.append(" {").append(LINE);
+		builder.append("	").append(LINE).append("}");
+		return builder;
 	}
 
 }
