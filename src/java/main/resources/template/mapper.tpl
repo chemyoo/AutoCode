@@ -1,8 +1,8 @@
-package com.chemyoo.springbootweb.mapper;
+package pers.chemyoo.core.mapper;
 
-import com.chemyoo.springbootweb.mapper.IBaseMapper;
-import com.chemyoo.springbootweb.web.entity.#{T};
+import pers.chemyoo.core.entity.#{T};
+import pers.chemyoo.core.setting.base.mapper.BaseMapper;
 
-public interface #{T}Mapper extends IBaseMapper<#{T}> {
-	
+public interface #{T}Mapper extends BaseMapper<#{T}> {
+
 }

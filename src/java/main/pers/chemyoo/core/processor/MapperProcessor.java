@@ -24,9 +24,6 @@ import pers.chemyoo.core.logger.LogWriter;
 @SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoMapper"})
 public class MapperProcessor extends AbstractProcessor {
 	
-	
-	private Properties props = InitSystemConfig.getInstance();
-	
 	private static final String LINE = "\r\n";
 	
 	private static final String SUBFIX = "Mapper";
@@ -35,11 +32,12 @@ public class MapperProcessor extends AbstractProcessor {
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		for(Element element : roundEnv.getElementsAnnotatedWith(AutoMapper.class)) {
 			String name = element.getSimpleName().toString();
+			String fullName = element.toString();
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "element name: " + name);
             try {
             	String mapperName = name + SUBFIX;
 //            	FileObject fileObject = processingEnv.getFiler().createResource(StandardLocation.SOURCE_OUTPUT, props.getProperty("mapper.path"), mapperName)
-				JavaFileObject source = processingEnv.getFiler().createSourceFile(props.getProperty("mapper.path")+ "." + mapperName);
+				JavaFileObject source = processingEnv.getFiler().createSourceFile(getParentPackage(fullName) + mapperName);
             	Writer write = source.openWriter();
             	write.write(this.classbuilder(name));
 				write.close();
@@ -50,11 +48,24 @@ public class MapperProcessor extends AbstractProcessor {
 		return false;
 	}
 	
+	private String getParentPackage(String fullName) {
+		StringBuilder builder = new StringBuilder();
+		if(fullName != null && !fullName.isEmpty()) {
+			String[] array = fullName.split("\\.");
+			for(int i = 0, length = array.length - 2; i < length; i ++) {
+				builder.append(array[i]).append(".");
+			}
+		}
+		builder.append(SUBFIX.toLowerCase()).append(".");
+		return builder.toString();
+	}
+	
 	private String classbuilder(String name) {
 		return InitSystemConfig.readMapperTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", name);
 	}
 	
 	public StringBuilder classbuilder(String className, String beanName, String name) {
+		Properties props = InitSystemConfig.getInstance();
 		StringBuilder builder = new StringBuilder();
 		String pkg = props.getProperty("mapper.path");
 		if (pkg == null) {
@@ -82,6 +93,10 @@ public class MapperProcessor extends AbstractProcessor {
 		builder.append(" {").append(LINE);
 		builder.append("	").append(LINE).append("}");
 		return builder;
+	}
+	
+	public static void main(String[] args) {
+		new MapperProcessor().getParentPackage("com.chemyoo.core.ACC");
 	}
 
 }
