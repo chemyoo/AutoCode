@@ -32,17 +32,30 @@ public class InterfaceProcessor extends AbstractProcessor {
 		for(Element element : roundEnv.getElementsAnnotatedWith(AutoInterface.class)) {
 			String name = element.getSimpleName().toString();
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "element name: " + name);
+            String fullName = element.toString();
+            String serviceName = name + SUBFIX;
             try {
-            	String serviceName = name + SUBFIX;
-				JavaFileObject source = processingEnv.getFiler().createSourceFile(props.getProperty("service.path")+ "." + serviceName);
-            	Writer write = source.openWriter();
+				JavaFileObject source = processingEnv.getFiler().createSourceFile(getParentPackage(fullName) +  serviceName);
+				Writer write = source.openWriter();
             	write.write(this.classbuilder(name));
 				write.close();
 			} catch (Exception e) {
 				LogWriter.error(e.getMessage());
-			}
+			} 
         }
 		return false;
+	}
+	
+	private String getParentPackage(String fullName) {
+		StringBuilder builder = new StringBuilder();
+		if(fullName != null && !fullName.isEmpty()) {
+			String[] array = fullName.split("\\.");
+			for(int i = 0, length = array.length - 2; i < length; i ++) {
+				builder.append(array[i]).append(".");
+			}
+		}
+		builder.append(SUBFIX.toLowerCase()).append(".");
+		return builder.toString();
 	}
 	
 	private String classbuilder(String name) {
