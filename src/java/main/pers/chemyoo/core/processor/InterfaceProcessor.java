@@ -23,7 +23,7 @@ import pers.chemyoo.core.logger.LogWriter;
 @SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoInterface"})
 public class InterfaceProcessor extends AbstractProcessor {
 	
-private Properties props = InitSystemConfig.getInstance();
+	private Properties props = InitSystemConfig.getInstance();
 	
 	private static final String SUBFIX = "Service";
 
