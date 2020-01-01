@@ -17,13 +17,14 @@ import javax.tools.JavaFileObject;
 
 import pers.chemyoo.core.annotations.AutoInterface;
 import pers.chemyoo.core.logger.LogWriter;
+import pers.chemyoo.core.system.InitSystemConfig;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoInterface"})
 public class InterfaceProcessor extends AbstractProcessor {
 	
-	private Properties props = InitSystemConfig.getInstance();
+//	private Properties props = InitSystemConfig.getInstance();
 	
 	private static final String SUBFIX = "Service";
 

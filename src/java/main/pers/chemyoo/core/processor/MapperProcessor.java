@@ -1,6 +1,5 @@
 package pers.chemyoo.core.processor;
 
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -14,10 +13,10 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
 
 import pers.chemyoo.core.annotations.AutoMapper;
 import pers.chemyoo.core.logger.LogWriter;
+import pers.chemyoo.core.system.InitSystemConfig;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
@@ -33,17 +32,19 @@ public class MapperProcessor extends AbstractProcessor {
 		for(Element element : roundEnv.getElementsAnnotatedWith(AutoMapper.class)) {
 			String name = element.getSimpleName().toString();
 			String fullName = element.toString();
+			LogWriter.error("name:" + name);
+			LogWriter.error("fullname:" + fullName);
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "element name: " + name);
-            try {
-            	String mapperName = name + SUBFIX;
+//            try {
+//            	String mapperName = name + SUBFIX;
 //            	FileObject fileObject = processingEnv.getFiler().createResource(StandardLocation.SOURCE_OUTPUT, props.getProperty("mapper.path"), mapperName)
-				JavaFileObject source = processingEnv.getFiler().createSourceFile(getParentPackage(fullName) + mapperName);
-            	Writer write = source.openWriter();
-            	write.write(this.classbuilder(name));
-				write.close();
-			} catch (Exception e) {
-				LogWriter.error(e.getMessage());
-			}
+//				JavaFileObject source = processingEnv.getFiler().createSourceFile(getParentPackage(fullName) + mapperName);
+//            	Writer write = source.openWriter();
+//            	write.write(this.classbuilder(name));
+//				write.close();
+//			} catch (Exception e) {
+//				LogWriter.error(e.getMessage());
+//			}
         }
 		return false;
 	}

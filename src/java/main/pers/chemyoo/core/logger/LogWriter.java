@@ -29,4 +29,14 @@ public class LogWriter {
 		write("error:" + text);
 	}
 	
+	public static void error(String text, Throwable t) {
+		write("error:" + text);
+		if(t != null)
+		{
+			for(StackTraceElement ele : t.getStackTrace()) {
+				write(ele.getFileName() + "--->" +ele.toString());
+			}
+		}
+	}
+	
 }

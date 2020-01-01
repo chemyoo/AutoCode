@@ -1,4 +1,4 @@
-package pers.chemyoo.core.processor;
+package pers.chemyoo.core.system;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -22,13 +22,9 @@ public class InitSystemConfig {
 
 	private static void init() {
 		readAsStream();
-		for(Object key : props.keySet()) {
-			LogWriter.info((String)key + "=" + props.getProperty((String)key));
-		}
 	}
 	
 	private static void readAsStream() {
-		LogWriter.info("getResourceAsStream...");
 		InputStream in = InitSystemConfig.class.getClassLoader().getResourceAsStream("config.properties");
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));) {
 			props.load(bufferedReader);
