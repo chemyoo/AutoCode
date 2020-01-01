@@ -19,7 +19,7 @@ public class EncodingUtil {
 	 * @return 转换后的字符串
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String convertEncoding_Str(String src,String srcCharset,String destCharet) 
+	public static String convertEncodingStr(String src, String destCharet) 
 			throws UnsupportedEncodingException{
 		byte[] bts = src.getBytes(destCharet);
 		return new String(bts, destCharet);
@@ -35,7 +35,7 @@ public class EncodingUtil {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public static byte[]  convertEncoding_ByteArr(byte[] src,String srcCharset,String destCharet) 
+	public static byte[] convertEncodingByteArr(byte[] src, String srcCharset, String destCharet) 
 			throws UnsupportedEncodingException{	
 		String s = new String(src, srcCharset);
 		return s.getBytes(destCharet);
@@ -49,9 +49,10 @@ public class EncodingUtil {
 	 * @return
 	 */
 	public static String byteToHex(byte... byteArr) {
-		if (null == byteArr || byteArr.length == 0)
+		if (null == byteArr || byteArr.length == 0) {
 			return "";
-		StringBuffer sb = new StringBuffer();
+		}
+		StringBuilder sb = new StringBuilder();
 		String tmp = null;
 
 		for (byte b : byteArr) {
@@ -70,8 +71,6 @@ public class EncodingUtil {
 		sb.deleteCharAt(sb.length() - 1); // delete last space
 		return sb.toString();
 	}
-
-
 
 }
 
