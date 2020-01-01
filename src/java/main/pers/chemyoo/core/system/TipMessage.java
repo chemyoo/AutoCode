@@ -13,7 +13,7 @@ import javax.swing.JWindow;
 /**
  *  右下角弹出式提示框
  *  1.自动上升
- *  2.停留一段时间，本例子中60秒
+ *  2.停留一段时间
  *  3.自动下降直至消失
  *  4.线程控制窗口的出现和消失，同时添加鼠标事件控制，可以提前使提示框消失
  *  5.鼠标事件结合自己的需求实现，此处只是实现一个点击事件
@@ -22,10 +22,10 @@ public class TipMessage extends JWindow implements Runnable, MouseListener {
     private static final long serialVersionUID = -3564453685861233338L;
     private Integer screenWidth;  // 屏幕宽度
     private Integer screenHeight; // 屏幕高度
-    private Integer windowWidth = 350; // 设置提示窗口宽度
-    private Integer windowHeight = 80; // 设置提示窗口高度
+    private Integer windowWidth = 380; // 设置提示窗口宽度
+    private Integer windowHeight = 90; // 设置提示窗口高度
     private Integer bottmToolKitHeight; // 底部任务栏高度，如果没有任务栏则为零
-    private Integer stayTime = 60 * 1000; // 提示框停留时间
+    private Integer stayTime = 30 * 1000; // 提示框停留时间
     private Integer x; // 窗口起始X坐标
     private Integer y; // 窗口起始Y坐标
     private String title = "温馨提示:";

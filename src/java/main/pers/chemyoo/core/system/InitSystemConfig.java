@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -15,7 +16,9 @@ import pers.chemyoo.core.logger.LogWriter;
 
 public class InitSystemConfig {
 	
-	private InitSystemConfig() {};
+	private InitSystemConfig() {
+		throw new NoSuchMethodError("InitSystemConfig class can not instant.");
+	}
 
 	private static Properties props = new Properties();
 
@@ -39,8 +42,8 @@ public class InitSystemConfig {
 		String workSpace = System.getProperty("user.dir");
 		File file = new File(workSpace, File.separator + "AutoCodeConfig" + File.separator + "autocode.properties");
 		if(!file.exists() || !file.isFile()) {
-			new TipMessage(file.getAbsolutePath() + "文件不存在，正在将AutoCode.jar中的/resources/autocode.properties拷贝到"
-					+ file.getParent() + "文件夹下。");
+			new TipMessage("配置文件：autocode.properties不存在，请将配置文件放到->" + file.getParent() 
+				+ "文件夹下，现在正在为您生成新的配置文件，请按需更改。");
 			boolean success = file.createNewFile();
 			if(success) {
 				InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("autocode.properties");
@@ -51,7 +54,7 @@ public class InitSystemConfig {
 			}
 		}
 		try (InputStream in = FileUtils.openInputStream(file);
-			 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in , "UTF-8"));) {
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in , "UTF-8"));) {
 			props.load(bufferedReader);
 		} catch (Exception e) {
 			LogWriter.error(e.getMessage());
@@ -88,6 +91,8 @@ public class InitSystemConfig {
 	public static void main(String[] args) {
 		System.err.println(InitSystemConfig.readMapperTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", "HUB"));
 		System.err.println(InitSystemConfig.readServiceTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", "HUB"));
+		System.err.println(System.getProperty("file.encoding"));
+		System.err.println(Charset.defaultCharset().displayName());
 	}
 
 }

@@ -1,7 +1,9 @@
 package pers.chemyoo.core.processor;
 
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -22,10 +24,13 @@ import com.google.common.collect.Lists;
 import pers.chemyoo.core.annotations.AutoConstant;
 import pers.chemyoo.core.logger.LogWriter;
 import pers.chemyoo.core.system.ConstantGenerator;
+import pers.chemyoo.core.system.InitSystemConfig;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({ "pers.chemyoo.core.annotations.AutoConstant" })
 public class ConstantProcessor extends AbstractProcessor {
+	
+	private Properties props = InitSystemConfig.getInstance();
 
 	@Override
 	@SuppressWarnings("deprecation")
@@ -43,7 +48,9 @@ public class ConstantProcessor extends AbstractProcessor {
 					String clazzString = generator.buildClassString(list);
 					JavaFileObject source = processingEnv.getFiler().createSourceFile(generator.getFullClassName());
 					write = source.openWriter();
-					write.write(new String(clazzString.getBytes("utf-8")));
+					String curEcode = props.getProperty("current.file.encoding", Charset.defaultCharset().displayName());
+					String transEcode = props.getProperty("trans.file.encoding", Charset.defaultCharset().displayName());
+					write.write(new String(clazzString.getBytes(curEcode), transEcode));
 					write.close();
 				} catch (Exception e) {
 					LogWriter.error(e.getMessage(), e);
