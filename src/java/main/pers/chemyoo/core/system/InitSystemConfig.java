@@ -1,9 +1,15 @@
 package pers.chemyoo.core.system;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import pers.chemyoo.core.logger.LogWriter;
 
@@ -21,17 +27,35 @@ public class InitSystemConfig {
 	}
 
 	private static void init() {
-		readAsStream();
+		try {
+			readAsStream();
+		} catch (IOException e) {
+			throw new IllegalAccessError(e.getMessage());
+		}
 	}
 	
-	private static void readAsStream() {
-		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("autocode.properties");
-		LogWriter.info(System.getProperty("user.dir"));
-		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));) {
+	@SuppressWarnings("deprecation")
+	private static void readAsStream() throws IOException {
+		String workSpace = System.getProperty("user.dir");
+		File file = new File(workSpace, File.separator + "AutoCodeConfig" + File.separator + "autocode.properties");
+		if(!file.exists() || !file.isFile()) {
+			new TipMessage(file.getAbsolutePath() + "文件不存在，正在将AutoCode.jar中的/resources/autocode.properties拷贝到"
+					+ file.getParent() + "文件夹下。");
+			boolean success = file.createNewFile();
+			if(success) {
+				InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("autocode.properties");
+				ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+				IOUtils.copy(in, byteArray);
+				FileUtils.writeByteArrayToFile(file, byteArray.toByteArray());
+				IOUtils.closeQuietly(in);
+			}
+		}
+		try (InputStream in = FileUtils.openInputStream(file);
+			 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in , "UTF-8"));) {
 			props.load(bufferedReader);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LogWriter.error(e.getMessage());
+			throw new IllegalAccessError(e.getMessage());
 		}
 	}
 	
@@ -44,7 +68,6 @@ public class InitSystemConfig {
 	}
 	
 	public static String readTemplate(String name) {
-		LogWriter.info("getTemplateAsStream...");
 		StringBuilder builder = new StringBuilder();
 		InputStream in = InitSystemConfig.class.getClassLoader().getResourceAsStream(name);
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));) {
