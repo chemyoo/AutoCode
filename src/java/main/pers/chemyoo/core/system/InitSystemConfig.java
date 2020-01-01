@@ -25,7 +25,8 @@ public class InitSystemConfig {
 	}
 	
 	private static void readAsStream() {
-		InputStream in = InitSystemConfig.class.getClassLoader().getResourceAsStream("config.properties");
+		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("autocode.properties");
+		LogWriter.info(System.getProperty("user.dir"));
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));) {
 			props.load(bufferedReader);
 		} catch (Exception e) {
