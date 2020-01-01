@@ -65,27 +65,25 @@ public class ConstantProcessor extends AbstractProcessor {
 	}
 
 	// -------------------------------------------NOTE------------------------------------------------------------
-	// if (element.getKind() == ElementKind.CLASS) {
-	// for (Element enclosedElement : element.getEnclosedElements()) {
-	// if (enclosedElement.getKind() == ElementKind.FIELD) {
-	// Set<Modifier> modifiers = enclosedElement.getModifiers();
-	// StringBuilder sb = new StringBuilder();
-	// if (modifiers.contains(Modifier.PRIVATE)) {
-	// sb.append("private ");
-	// } else if (modifiers.contains(Modifier.PROTECTED)) {
-	// sb.append("protected ");
-	// } else if (modifiers.contains(Modifier.PUBLIC)) {
-	// sb.append("public ");
-	// }
-	// if (modifiers.contains(Modifier.STATIC))
-	// sb.append("static ");
-	// if (modifiers.contains(Modifier.FINAL))
-	// sb.append("final ");
-	// sb.append(enclosedElement.asType()).append("
-	// ").append(enclosedElement.getSimpleName());
-	// LogWriter.info("print fields:-" + sb.toString());
-	// }
-	// }
-	// }
+	/** if (element.getKind() == ElementKind.CLASS) 
+	 for (Element enclosedElement : element.getEnclosedElements()) {
+	 if (enclosedElement.getKind() == ElementKind.FIELD) 
+	 Set<Modifier> modifiers = enclosedElement.getModifiers();
+	 StringBuilder sb = new StringBuilder();
+	 if (modifiers.contains(Modifier.PRIVATE)) 
+	 sb.append("private ");
+	 } else if (modifiers.contains(Modifier.PROTECTED)) 
+	 sb.append("protected ");
+	 } else if (modifiers.contains(Modifier.PUBLIC)) 
+	 sb.append("public ");
+	 }
+	 if (modifiers.contains(Modifier.STATIC))
+	 sb.append("static ");
+	 if (modifiers.contains(Modifier.FINAL))
+	 sb.append("final ");
+	 sb.append(enclosedElement.asType()).append("").append(enclosedElement.getSimpleName());
+	 }
+	 }
+	 }*/
 
 }
