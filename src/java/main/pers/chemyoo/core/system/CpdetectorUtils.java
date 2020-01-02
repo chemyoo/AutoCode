@@ -15,12 +15,17 @@ import pers.chemyoo.core.logger.LogWriter;
 
 public class CpdetectorUtils
 {
+	
+	private CpdetectorUtils() {
+		throw new NoSuchMethodError("CpdetectorUtils class can not instant.");
+	}
+	
 	//获取文本编码
 	private static final String FILE_ENCODE_TYPE = "file";
 	//获取文件流编码
 	private static final String IO_ENCODE_TYPE = "io";
 
-	private CodepageDetectorProxy getDetector()
+	private static CodepageDetectorProxy getDetector()
 	{ 
 		/*
 		 * detector是探测器，它把探测任务交给具体的探测实现类的实例完成。 cpDetector内置了一些常用的探测实现类，这些探测实现类的实例可以通过add方法 加进来，
@@ -49,7 +54,7 @@ public class CpdetectorUtils
 	/**
 	 * 根据"encodeType"获取文本编码或文件流编码
 	 */
-	public String getFileOrIOEncode(String path, String encodeType)
+	public static String getFileOrIOEncode(String path, String encodeType)
 	{
 		CodepageDetectorProxy detector = getDetector();
 		File file = new File(path);
@@ -74,7 +79,7 @@ public class CpdetectorUtils
 		{
 			//这里获取编码失败,使用系统默认的编码
 			charset = Charset.defaultCharset();
-			LogWriter.error(getClass(), e.getMessage(), e);
+			LogWriter.error(CpdetectorUtils.class, e.getMessage(), e);
 		}
 		return charset.name();
 	}
