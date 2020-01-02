@@ -103,6 +103,12 @@ public class EncodingUtils {
     public static boolean isGbk(String str) {
     	return Charset.forName("gbk").newEncoder().canEncode(str);
     }
+    
+    public static void main(String[] args) throws UnsupportedEncodingException
+	{
+    	String clazzString = new String("姓名流".getBytes("gbk"), "gbk");
+		System.err.println(clazzString);
+	}
 
 }
 

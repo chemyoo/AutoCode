@@ -1,5 +1,6 @@
 package pers.chemyoo.core.processor;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -49,10 +50,9 @@ public class ConstantProcessor extends AbstractProcessor {
 					String clazzString = generator.buildClassString(list);
 					JavaFileObject source = processingEnv.getFiler().createSourceFile(generator.getFullClassName());
 					write = source.openWriter();
-					String curEcode = props.getProperty("current.file.encoding", Charset.defaultCharset().displayName());
-					String transEcode = props.getProperty("trans.file.encoding", Charset.defaultCharset().displayName());
-					write.write(new String(clazzString.getBytes(curEcode), transEcode));
+					this.transEcoding(write, clazzString);
 					write.close();
+					processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, String.format("当前系统编码：%s", Charset.defaultCharset().displayName()));
 					processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, String.format("%s file was created.", generator.getClassName()));
 				} catch (Exception e) {
 					LogWriter.error(e.getMessage(), e);
@@ -62,6 +62,29 @@ public class ConstantProcessor extends AbstractProcessor {
 			}
 		}
 		return false;
+	}
+	
+	private void transEcoding(Writer write, String text) throws IOException {
+		Charset defaultCharset = Charset.defaultCharset();
+		String usedEcode = props.getProperty("used.file.encoding", defaultCharset.displayName());
+		String transEcode = props.getProperty("trans.file.encoding", defaultCharset.displayName());
+		
+		LogWriter.info(ConstantProcessor.class, "defaultCharset: %s.", defaultCharset.displayName());
+		LogWriter.info(ConstantProcessor.class, "current used charset: %s.", usedEcode);
+		LogWriter.info(ConstantProcessor.class, "trans to charset: %s.", transEcode);
+		
+//		if(defaultCharset.displayName().equalsIgnoreCase(usedEcode)) {
+//			write.write(new String(text.getBytes(), transEcode));
+//		} else {
+//			write.write(new String(text.getBytes(usedEcode), transEcode));
+//		}
+		
+//		byte[] encodingByte = text.getBytes();
+//		for(int c : encodingByte) {
+//			write.write(c);
+//		}
+//		write.flush();
+		LogWriter.info("used charset:" + usedEcode + ", transEcode:" + transEcode);
 	}
 	
 	private void addField(List<Element> list, Element enclosedElement) {

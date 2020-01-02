@@ -40,9 +40,13 @@
 		    <artifactId>guava</artifactId>
 		    <version>28.1-jre</version>
 		</dependency>
-
 		
-
+		<!-- https://mvnrepository.com/artifact/antlr/antlr -->
+		<dependency>
+		    <groupId>antlr</groupId>
+		    <artifactId>antlr</artifactId>
+		    <version>2.7.7</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -19,15 +19,31 @@ public class InitSystemConfig {
 	private InitSystemConfig() {
 		throw new NoSuchMethodError("InitSystemConfig class can not instant.");
 	}
+	
+	private static VersionMark versionMark = new VersionMark();
+	
+	private static final String WORK_SPACE = System.getProperty("user.dir");
+	private static final File FILE = new File(WORK_SPACE, File.separator + "AutoCodeConfig" + File.separator + "autocode.properties");
+	
+	static class VersionMark {
+		private long version = 0;
+	}
 
 	private static Properties props = new Properties();
 
 	public static Properties getInstance() {
-		LogWriter.info("配置文件初始化");
-		if (props.isEmpty()) {
+		if (props.isEmpty() || isLatest()) {
 			init();
 		}
 		return props;
+	}
+	
+	private static boolean isLatest() {
+		if(!FILE.exists()) {
+			return true;
+		} else {
+			return versionMark.version < FILE.lastModified();
+		}
 	}
 
 	private static void init() {
@@ -41,18 +57,17 @@ public class InitSystemConfig {
 	
 	@SuppressWarnings("deprecation")
 	private static void readAsStream() throws IOException {
-		String workSpace = System.getProperty("user.dir");
-		File file = new File(workSpace, File.separator + "AutoCodeConfig" + File.separator + "autocode.properties");
-		if(!file.exists() || !file.isFile()) {
-			new TipMessage("配置文件：autocode.properties不存在，请将配置文件放到->" + file.getParent() 
+		if(!FILE.exists() || !FILE.isFile()) {
+			new TipMessage("配置文件：autocode.properties不存在，请将配置文件放到->" + FILE.getParent() 
 				+ "文件夹下，现在正在为您生成新的配置文件，请按需更改。");
 			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("autocode.properties");
 			ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
 			IOUtils.copy(in, byteArray);
-			FileUtils.writeByteArrayToFile(file, byteArray.toByteArray());
+			FileUtils.writeByteArrayToFile(FILE, byteArray.toByteArray());
 			IOUtils.closeQuietly(in);
 		}
-		try (InputStream in = FileUtils.openInputStream(file);
+		versionMark.version = FILE.lastModified();
+		try (InputStream in = FileUtils.openInputStream(FILE);
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in , "UTF-8"));) {
 			props.load(bufferedReader);
 		} catch (Exception e) {
