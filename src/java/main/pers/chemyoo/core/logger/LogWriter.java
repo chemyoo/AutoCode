@@ -37,7 +37,7 @@ public class LogWriter {
 		if(t != null)
 		{
 			for(StackTraceElement ele : t.getStackTrace()) {
-				write(ele.getFileName() + "--->" +ele.toString());
+				write(ele.getFileName() + "." + ele.getMethodName() + "--->" +ele.toString());
 			}
 		}
 	}

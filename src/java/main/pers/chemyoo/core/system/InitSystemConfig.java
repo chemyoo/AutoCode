@@ -46,14 +46,11 @@ public class InitSystemConfig {
 		if(!file.exists() || !file.isFile()) {
 			new TipMessage("配置文件：autocode.properties不存在，请将配置文件放到->" + file.getParent() 
 				+ "文件夹下，现在正在为您生成新的配置文件，请按需更改。");
-			boolean success = file.createNewFile();
-			if(success) {
-				InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("autocode.properties");
-				ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-				IOUtils.copy(in, byteArray);
-				FileUtils.writeByteArrayToFile(file, byteArray.toByteArray());
-				IOUtils.closeQuietly(in);
-			}
+			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("autocode.properties");
+			ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+			IOUtils.copy(in, byteArray);
+			FileUtils.writeByteArrayToFile(file, byteArray.toByteArray());
+			IOUtils.closeQuietly(in);
 		}
 		try (InputStream in = FileUtils.openInputStream(file);
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in , "UTF-8"));) {
@@ -64,7 +61,7 @@ public class InitSystemConfig {
 		}
 	}
 	
-	public static String readMapperTemplate() {
+	/**public static String readMapperTemplate() {
 		return readTemplate("template/mapper.tpl");
 	}
 	
@@ -88,11 +85,11 @@ public class InitSystemConfig {
 		}
 		LogWriter.info(builder.toString());
 		return builder.toString();
-	}
+	}*/
 	
 	public static void main(String[] args) {
-		System.err.println(InitSystemConfig.readMapperTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", "HUB"));
-		System.err.println(InitSystemConfig.readServiceTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", "HUB"));
+//		System.err.println(InitSystemConfig.readMapperTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", "HUB"));
+//		System.err.println(InitSystemConfig.readServiceTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", "HUB"));
 		System.err.println(System.getProperty("file.encoding"));
 		System.err.println(Charset.defaultCharset().displayName());
 	}

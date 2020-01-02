@@ -1,7 +1,5 @@
 package pers.chemyoo.core.processor;
 
-import java.io.Writer;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -13,11 +11,9 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
 
 import pers.chemyoo.core.annotations.AutoInterface;
 import pers.chemyoo.core.logger.LogWriter;
-import pers.chemyoo.core.system.InitSystemConfig;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
@@ -36,10 +32,10 @@ public class InterfaceProcessor extends AbstractProcessor {
             String fullName = element.toString();
             String serviceName = name + SUBFIX;
             try {
-				JavaFileObject source = processingEnv.getFiler().createSourceFile(getParentPackage(fullName) +  serviceName);
-				Writer write = source.openWriter();
-            	write.write(this.classbuilder(name));
-				write.close();
+//				JavaFileObject source = processingEnv.getFiler().createSourceFile(getParentPackage(fullName) +  serviceName);
+//				Writer write = source.openWriter();
+//            	write.write(this.classbuilder(name));
+//				write.close();
 			} catch (Exception e) {
 				LogWriter.error(e.getMessage());
 			} 
@@ -59,9 +55,9 @@ public class InterfaceProcessor extends AbstractProcessor {
 		return builder.toString();
 	}
 	
-	private String classbuilder(String name) {
-		return InitSystemConfig.readServiceTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", name);
-	}
+//	private String classbuilder(String name) {
+//		return InitSystemConfig.readServiceTemplate().replaceAll("#\\{[a-zA-Z]+?\\}", name);
+//	}
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {

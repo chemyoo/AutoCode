@@ -15,6 +15,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 import org.apache.commons.io.IOUtils;
@@ -52,6 +53,7 @@ public class ConstantProcessor extends AbstractProcessor {
 					String transEcode = props.getProperty("trans.file.encoding", Charset.defaultCharset().displayName());
 					write.write(new String(clazzString.getBytes(curEcode), transEcode));
 					write.close();
+					processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, String.format("%s file was created.", generator.getClassName()));
 				} catch (Exception e) {
 					LogWriter.error(e.getMessage(), e);
 				} finally {
