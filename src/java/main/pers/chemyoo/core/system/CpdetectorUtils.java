@@ -23,11 +23,6 @@ public class CpdetectorUtils
 		throw new NoSuchMethodError("CpdetectorUtils class can not instant.");
 	}
 	
-	//获取文本编码
-	private static final String FILE_ENCODE_TYPE = "file";
-	//获取文件流编码
-	private static final String IO_ENCODE_TYPE = "io";
-
 	private static CodepageDetectorProxy getDetector()
 	{ 
 		/*
