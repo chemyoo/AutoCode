@@ -23,6 +23,7 @@ public class InitSystemConfig {
 	private static Properties props = new Properties();
 
 	public static Properties getInstance() {
+		LogWriter.info("配置文件初始化");
 		if (props.isEmpty()) {
 			init();
 		}
@@ -33,6 +34,7 @@ public class InitSystemConfig {
 		try {
 			readAsStream();
 		} catch (IOException e) {
+			LogWriter.error(e.getMessage(), e);
 			throw new IllegalAccessError(e.getMessage());
 		}
 	}
@@ -57,7 +59,7 @@ public class InitSystemConfig {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in , "UTF-8"));) {
 			props.load(bufferedReader);
 		} catch (Exception e) {
-			LogWriter.error(e.getMessage());
+			LogWriter.error(e.getMessage(), e);
 			throw new IllegalAccessError(e.getMessage());
 		}
 	}

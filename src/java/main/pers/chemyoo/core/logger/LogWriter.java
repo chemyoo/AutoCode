@@ -3,6 +3,7 @@ package pers.chemyoo.core.logger;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
 import java.util.Calendar;
 
@@ -12,7 +13,9 @@ public class LogWriter {
 	private static String path = System.getProperty("user.dir");
 	
 	public static void write(String text) {
-		try (FileWriter writer = new FileWriter(path + File.separator + "errorLog.log", true)) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String date = format.format(Calendar.getInstance().getTime());
+		try (FileWriter writer = new FileWriter(path + File.separator + date + "errorLog.log", true)) {
 			ZoneOffset offset = ZoneOffset.ofHours(8);
 			writer.write(Calendar.getInstance().getTime().toInstant().atOffset(offset) + " -> ");
 			writer.write(text + "\r\n");

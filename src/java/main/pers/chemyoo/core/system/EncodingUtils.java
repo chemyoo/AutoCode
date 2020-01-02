@@ -1,9 +1,15 @@
 package pers.chemyoo.core.system;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
-public class EncodingUtil {
+public class EncodingUtils {
 
+	private EncodingUtils() {
+		throw new NoSuchMethodError("EncodingUtils class can not instant.");
+	}
+	
+	private final static String GBK = "GBK";
 
 	/**
 	 * 将原正确编码的字符串src，转化为编码为srcCharset的字符串
@@ -19,8 +25,7 @@ public class EncodingUtil {
 	 * @return 转换后的字符串
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String convertEncodingStr(String src, String destCharet) 
-			throws UnsupportedEncodingException{
+	public static String convertEncodingStr(String src, String destCharet) throws UnsupportedEncodingException {
 		byte[] bts = src.getBytes(destCharet);
 		return new String(bts, destCharet);
 	}
@@ -35,8 +40,7 @@ public class EncodingUtil {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public static byte[] convertEncodingByteArr(byte[] src, String srcCharset, String destCharet) 
-			throws UnsupportedEncodingException{	
+	public static byte[] convertEncodingByteArr(byte[] src, String srcCharset, String destCharet) throws UnsupportedEncodingException{	
 		String s = new String(src, srcCharset);
 		return s.getBytes(destCharet);
 	}
@@ -71,6 +75,34 @@ public class EncodingUtil {
 		sb.deleteCharAt(sb.length() - 1); // delete last space
 		return sb.toString();
 	}
+	
+    /**
+     * 判断是否为ISO-8859-1
+     *
+     * @return
+     */
+    public static boolean isISO(String str) {
+    	return Charset.forName("ISO-8859-1").newEncoder().canEncode(str);
+    }
+ 
+    /**
+     * 判断是否为UTF-8
+     *
+     * @return
+     */
+    public static boolean isUtf(String str) {
+ 
+    	return Charset.forName("UTF-8").newEncoder().canEncode(str);
+    }
+ 
+    public static boolean isUnicode(String str) {
+ 
+    	return Charset.forName("unicode").newEncoder().canEncode(str);
+    }
+	
+    public static boolean isGbk(String str) {
+    	return Charset.forName("gbk").newEncoder().canEncode(str);
+    }
 
 }
 
