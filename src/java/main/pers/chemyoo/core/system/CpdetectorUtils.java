@@ -2,9 +2,12 @@ package pers.chemyoo.core.system;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import info.monitorenter.cpdetector.io.ASCIIDetector;
 import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
@@ -50,36 +53,43 @@ public class CpdetectorUtils
 
 		return detector;
 	}
+	
+	public static String getFileEncode(File file) 
+	{
+		String charset = null;
+		try
+		{
+			charset = getIOEncode(FileUtils.openInputStream(file));
+		}
+		catch (IOException e)
+		{
+			LogWriter.error(CpdetectorUtils.class, e.getMessage(), e);
+			charset = Charset.defaultCharset().name();
+		}
+		return charset;
+	}
+	
+	public static String getFileEncode(String path)
+	{
+		return getFileEncode(new File(path));
+	}
 
 	/**
 	 * 根据"encodeType"获取文本编码或文件流编码
 	 */
-	public static String getFileOrIOEncode(String path, String encodeType)
+	@SuppressWarnings("deprecation")
+	public static String getIOEncode(InputStream input)
 	{
 		CodepageDetectorProxy detector = getDetector();
-		File file = new File(path);
 		Charset charset = null;
-		try
-		{
-			switch (encodeType)
-			{
-			case FILE_ENCODE_TYPE:
-				charset = detector.detectCodepage(file.toURI().toURL());
-				break;
-			case IO_ENCODE_TYPE:
-				charset = detector.detectCodepage(new BufferedInputStream(new FileInputStream(file)), 128);// 128表示读取128字节来判断文件流的编码,读得越多越精确,但是速度慢
-				break;
-			default:
-				charset = Charset.defaultCharset();
-				break;
-			}
-
-		}
-		catch (IOException e)
-		{
+		try(BufferedInputStream bufferedInputStream = new BufferedInputStream(input)) {
+			charset = detector.detectCodepage(bufferedInputStream, 128);// 128表示读取128字节来判断文件流的编码,读得越多越精确,但是速度慢
+		} catch (IOException e) {
 			//这里获取编码失败,使用系统默认的编码
 			charset = Charset.defaultCharset();
 			LogWriter.error(CpdetectorUtils.class, e.getMessage(), e);
+		} finally {
+			IOUtils.closeQuietly(input);
 		}
 		return charset.name();
 	}
