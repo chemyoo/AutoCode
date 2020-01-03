@@ -64,7 +64,7 @@ public class ConstantGenerator {
 			String comment = "";
 			Comment value = field.getAnnotation(Comment.class);
 			if (value != null) {
-				comment += "\t/** " + value.value() + " */";
+				comment += "\t/**" + value.value() + "*/";
 			}
 			if(StringUtils.isNotBlank(comment)) {
 				builder.append(comment).append(AutoCoreConstant.CRLF);
