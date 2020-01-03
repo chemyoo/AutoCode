@@ -29,13 +29,13 @@ public class ConstantGenerator {
 	 * @param className
 	 */
 	public ConstantGenerator(String className) {
-		String configPackage = props.getProperty("constant.classpath");
+		String configPackage = props.getProperty("base.package");
 		if (StringUtils.isBlank(configPackage)) {
 			throw new IllegalArgumentException("constant.classpath not found in properties.");
 		}
 		this.className = className + "Constant";
-		this.packageName = configPackage;
-		this.fullClassName = configPackage + "." + this.className;
+		this.packageName = configPackage + ".constant";
+		this.fullClassName = this.packageName + "." + this.className;
 	}
 
 	public String buildClassString(List<Element> list) {
