@@ -97,7 +97,7 @@ public class CpdetectorUtils
             throw new InternalError();  
         }  
     }  
-     
+
 	/**
 	 * 可实现大多数gbk到utf-8的转换
 	 * @param gbkStr
