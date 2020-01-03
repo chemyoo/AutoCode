@@ -8,7 +8,7 @@ import java.time.ZoneOffset;
 import java.util.Calendar;
 
 public class LogWriter {
-	private LogWriter() {};
+	private LogWriter() {}
 	
 	private static String path = System.getProperty("user.dir");
 	
@@ -30,7 +30,6 @@ public class LogWriter {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println(e);
 		}
 	}
 	

@@ -1,6 +1,8 @@
 package pers.chemyoo.core.processor;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -26,6 +28,7 @@ import com.google.common.collect.Lists;
 import pers.chemyoo.core.annotations.AutoConstant;
 import pers.chemyoo.core.logger.LogWriter;
 import pers.chemyoo.core.system.ConstantGenerator;
+import pers.chemyoo.core.system.CpdetectorUtils;
 import pers.chemyoo.core.system.InitSystemConfig;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
@@ -84,6 +87,9 @@ public class ConstantProcessor extends AbstractProcessor {
 //			write.write(c);
 //		}
 //		write.flush();
+		InputStream input = new ByteArrayInputStream(text.getBytes());
+		String charset = CpdetectorUtils.getIOEncode(input);
+		LogWriter.info(ConstantProcessor.class, "input charset: %s.", charset);
 		LogWriter.info("used charset:" + usedEcode + ", transEcode:" + transEcode);
 	}
 	
