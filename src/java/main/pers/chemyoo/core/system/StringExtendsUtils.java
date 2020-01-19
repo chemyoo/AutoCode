@@ -72,10 +72,10 @@ public class StringExtendsUtils extends StringUtils {
 	 * 
 	 * @param context
 	 * @param symbols
-	 *            <p>
-	 *            例如： <div>repalceSymbol("abc", "ac") = b;</div>
-	 *            <div>repalceSymbol("abc defg", "a cg") = bdef;</div>
-	 *            </p>
+	 * <p>
+	 *   例如： <div>repalceSymbol("abc", "ac") = b;</div>
+	 *        <div>repalceSymbol("abc defg", "a cg") = bdef;</div>
+	 * </p>
 	 * @return
 	 */
 	public static String removeSymbol(String context, String symbols) {
