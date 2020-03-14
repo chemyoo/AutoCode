@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
@@ -23,11 +24,6 @@ public class CpdetectorUtils
 		throw new NoSuchMethodError("CpdetectorUtils class can not instant.");
 	}
 	
-	//获取文本编码
-	private static final String FILE_ENCODE_TYPE = "file";
-	//获取文件流编码
-	private static final String IO_ENCODE_TYPE = "io";
-
 	private static CodepageDetectorProxy getDetector()
 	{ 
 		/*
@@ -93,6 +89,42 @@ public class CpdetectorUtils
 		}
 		return charset.name();
 	}
+	
+	public static String transGBKToUTF8(String gbkStr) {  
+        try {  
+            return new String(getUTF8BytesFromGBKString(gbkStr), "UTF-8");  
+        } catch (UnsupportedEncodingException e) {  
+            throw new InternalError();  
+        }  
+    }  
+
+	/**
+	 * 可实现大多数gbk到utf-8的转换
+	 * @param gbkStr
+	 * @return
+	 */
+    public static byte[] getUTF8BytesFromGBKString(String gbkStr) {  
+        int n = gbkStr.length();  
+        byte[] utfBytes = new byte[3 * n];  
+        int k = 0;  
+        for (int i = 0; i < n; i++) {  
+            int m = gbkStr.charAt(i);  
+            if (m < 128 && m >= 0) {  
+                utfBytes[k++] = (byte) m;  
+                continue;  
+            }  
+            utfBytes[k++] = (byte) (0xe0 | (m >> 12));  
+            utfBytes[k++] = (byte) (0x80 | ((m >> 6) & 0x3f));  
+            utfBytes[k++] = (byte) (0x80 | (m & 0x3f));  
+        }  
+        if (k < utfBytes.length) {  
+            byte[] tmp = new byte[k];  
+            System.arraycopy(utfBytes, 0, tmp, 0, k);  
+            return tmp;  
+        }  
+        return utfBytes;  
+    }
+
 
 	/**
 	public static void main(String[] args) throws IOException
