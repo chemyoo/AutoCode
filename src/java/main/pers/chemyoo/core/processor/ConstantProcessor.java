@@ -87,9 +87,9 @@ public class ConstantProcessor extends AbstractProcessor {
 //			write.write(c);
 //		}
 //		write.flush();
-		InputStream input = new ByteArrayInputStream(text.getBytes());
-		String charset = CpdetectorUtils.getIOEncode(input);
-		LogWriter.info(ConstantProcessor.class, "input charset: %s.", charset);
+//		InputStream input = new ByteArrayInputStream(text.getBytes());
+//		String charset = CpdetectorUtils.getIOEncode(input);
+//		LogWriter.info(ConstantProcessor.class, "input charset: %s.", charset);
 		LogWriter.info("used charset:" + usedEcode + ", transEcode:" + transEcode);
 	}
 	
@@ -123,5 +123,11 @@ public class ConstantProcessor extends AbstractProcessor {
 	 }
 	 }
 	 }*/
+	
+	public static void main(String[] args) {
+		InputStream input = new ByteArrayInputStream("粉红色的发挥卡死".getBytes());
+		String charset = CpdetectorUtils.getIOEncode(input);
+		LogWriter.info(ConstantProcessor.class, "input charset: %s.", charset);
+	}
 
 }
