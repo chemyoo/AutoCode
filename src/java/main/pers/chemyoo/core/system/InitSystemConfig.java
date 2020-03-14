@@ -22,7 +22,7 @@ public class InitSystemConfig {
 	
 	private static VersionMark versionMark = new VersionMark();
 	
-	private static final String WORK_SPACE = System.getProperty("user.dir");
+	public static final String WORK_SPACE = System.getProperty("user.dir");
 	private static final File FILE = new File(WORK_SPACE, File.separator + "AutoCodeConfig" + File.separator + "autocode.properties");
 	
 	static class VersionMark {

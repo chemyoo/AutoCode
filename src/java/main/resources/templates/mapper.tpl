@@ -1,6 +1,6 @@
-package pers.chemyoo.core.mapper;
+package #{package};
 
-import pers.chemyoo.core.entity.#{T};
+import #{className};
 import pers.chemyoo.core.setting.base.mapper.BaseMapper;
 
 public interface #{T}Mapper extends BaseMapper<#{T}> {

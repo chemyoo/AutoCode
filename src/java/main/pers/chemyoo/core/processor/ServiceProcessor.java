@@ -21,14 +21,13 @@ import org.apache.commons.io.IOUtils;
 import pers.chemyoo.core.annotations.AutoService;
 import pers.chemyoo.core.logger.LogWriter;
 import pers.chemyoo.core.system.InitSystemConfig;
-import pers.chemyoo.core.system.MapperGenerator;
+import pers.chemyoo.core.system.ServiceGenerator;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
-@SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoMapper"})
-public class MapperProcessor extends AbstractProcessor {
+@SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoService"})
+public class ServiceProcessor extends AbstractProcessor {
 	
-
 	private Properties props = InitSystemConfig.getInstance();
 	
 	@Override
@@ -39,7 +38,7 @@ public class MapperProcessor extends AbstractProcessor {
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "element name: " + name);
             OutputStream out = null;
             try {
-            	MapperGenerator generator = new MapperGenerator(name);
+            	ServiceGenerator generator = new ServiceGenerator(name);
 				JavaFileObject source = processingEnv.getFiler().createSourceFile(generator.getFullClassName());
 				out = source.openOutputStream();
 				this.transEcoding(out, generator.buildClass());
@@ -62,5 +61,5 @@ public class MapperProcessor extends AbstractProcessor {
 			out.write(text.getBytes(charset));
 		}
 	}
-	
+
 }

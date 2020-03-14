@@ -31,7 +31,7 @@ public class ConstantGenerator {
 	public ConstantGenerator(String className) {
 		String configPackage = props.getProperty("base.package");
 		if (StringUtils.isBlank(configPackage)) {
-			throw new IllegalArgumentException("constant.classpath not found in properties.");
+			throw new IllegalArgumentException("base.package not found in properties.");
 		}
 		this.className = className + "Constant";
 		this.packageName = configPackage + ".constant";
