@@ -31,7 +31,7 @@ public final class FileReader {
 		File file = new File(TEMPLATES_FOLDER, fileName);
 		if(!file.exists()) {
 			// 文件不存在，就从jar包中拷贝出去
-			InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+			InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(File.separator + "templates" + File.separator + fileName);
 			Validate.notNull(input, "文件名【%s】的文件不存在", fileName);
 			try(OutputStream output = new FileOutputStream(file)){
 				IOUtils.copy(input, output);
