@@ -1,10 +1,12 @@
 package pers.chemyoo.core.system;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 public class EncodingUtils {
-
+	
 	private EncodingUtils() {
 		throw new NoSuchMethodError("EncodingUtils class can not instant.");
 	}
@@ -108,6 +110,44 @@ public class EncodingUtils {
 	{
     	String clazzString = new String("姓名流".getBytes("gbk"), "gbk");
 		System.err.println(clazzString);
+	}
+    
+    public static void transEcoding(OutputStream out, String text) throws IOException {
+    	Charset defaultCharset = Charset.defaultCharset();
+		String usedEcoding = InitSystemConfig.getInstance().getProperty("used.file.encoding", defaultCharset.displayName());
+		/**
+		String transEcode = props.getProperty("trans.file.encoding", defaultCharset.displayName());
+		LogWriter.info(ConstantProcessor.class, "defaultCharset: %s.", defaultCharset.displayName());
+		LogWriter.info(ConstantProcessor.class, "current used charset: %s.", usedEcode);
+		LogWriter.info(ConstantProcessor.class, "trans to charset: %s.", transEcode);
+		
+//		if(defaultCharset.displayName().equalsIgnoreCase(usedEcode)) {
+//			write.write(new String(text.getBytes(), transEcode));
+//		} else {
+//			write.write(new String(text.getBytes(usedEcode), transEcode));
+//		}
+		
+//		byte[] encodingByte = text.getBytes();
+//		for(int c : encodingByte) {
+//			write.write(c);
+//		}
+//		write.flush();
+//		InputStream input = new ByteArrayInputStream(text.getBytes());
+//		String charset = CpdetectorUtils.getIOEncode(input);
+//		LogWriter.info(ConstantProcessor.class, "input charset: %s.", charset);
+		LogWriter.info("used charset:" + usedEcode + ", transEcode:" + transEcode);
+		*/
+		
+		// 读取字符串编码，此处使用UTF-8编码，所以返回一定是UTF-8
+//		InputStream input = new ByteArrayInputStream(encodingByte)
+//		String charset = CpdetectorUtils.getIOEncode(input);
+		String charset = "UTF-8";
+		// 编译项目使用的编码是否是GBK,GB2312
+		if("GBK,GB2312".contains(usedEcoding.toUpperCase())) {
+			out.write(new String(text.getBytes(charset), "GBK").getBytes());
+		} else {
+			out.write(text.getBytes(charset));
+		}
 	}
 
 }

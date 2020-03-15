@@ -1,9 +1,6 @@
 package pers.chemyoo.core.processor;
 
-import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -20,15 +17,13 @@ import org.apache.commons.io.IOUtils;
 
 import pers.chemyoo.core.annotations.AutoService;
 import pers.chemyoo.core.logger.LogWriter;
-import pers.chemyoo.core.system.InitSystemConfig;
+import pers.chemyoo.core.system.EncodingUtils;
 import pers.chemyoo.core.system.ServiceGenerator;
 
 // 通过注解生成文件
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({"pers.chemyoo.core.annotations.AutoService"})
 public class ServiceProcessor extends AbstractProcessor {
-	
-	private Properties props = InitSystemConfig.getInstance();
 	
 	@Override
 	@SuppressWarnings("deprecation")
@@ -41,7 +36,7 @@ public class ServiceProcessor extends AbstractProcessor {
             	ServiceGenerator generator = new ServiceGenerator(name);
 				JavaFileObject source = processingEnv.getFiler().createSourceFile(generator.getFullClassName());
 				out = source.openOutputStream();
-				this.transEcoding(out, generator.buildClass());
+				EncodingUtils.transEcoding(out, generator.buildClass());
 			} catch (Exception e) {
 				LogWriter.error(e.getMessage());
 			} finally {
@@ -49,17 +44,6 @@ public class ServiceProcessor extends AbstractProcessor {
 			}
         }
 		return false;
-	}
-	
-	private void transEcoding(OutputStream out, String text) throws IOException {
-		Charset defaultCharset = Charset.defaultCharset();
-		String usedEcoding = props.getProperty("used.file.encoding", defaultCharset.displayName());
-		String charset = "UTF-8";
-		if("GBK,GB2312".contains(usedEcoding.toUpperCase())) {
-			out.write(new String(text.getBytes(charset), "GBK").getBytes());
-		} else {
-			out.write(text.getBytes(charset));
-		}
 	}
 
 }
