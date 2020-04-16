@@ -20,7 +20,7 @@ public class LogWriter {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		String date = format.format(calendar.getTime());
-		try (FileWriter writer = new FileWriter(path + File.separator + date + "errorLog.log", true)) {
+		try (FileWriter writer = new FileWriter(path + File.separator + "logs" + File.separator + date + "errorLog.log", true)) {
 			ZoneOffset offset = ZoneOffset.ofHours(8);
 			writer.write(calendar.getTime().toInstant().atOffset(offset) + " -> ");
 			if(newLine) {
