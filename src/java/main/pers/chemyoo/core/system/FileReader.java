@@ -31,16 +31,17 @@ public final class FileReader {
 			folder.mkdirs();
 		}
 	}
-	
+	// TODO 没有从jar中找到模板文件
 	public static String read(String fileName) throws IOException {
 		Validate.notBlank(fileName, "fileName不能为空");
 		File file = new File(TEMPLATES_FOLDER, fileName);
 		if(!file.exists()) {
 			createLogFolder(TEMPLATES_FOLDER);
 			// 文件不存在，就从jar包中拷贝出去
-			InputStream input = FileReader.class.getResourceAsStream(File.separator + "templates" + File.separator + fileName);
+//			TipMessage.showMsg(Thread.currentThread().getContextClassLoader());
+			InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(File.separator + "templates" + File.separator + fileName);
 			if(input == null) {
-				input = FileReader.class.getResourceAsStream("templates" + File.separator + fileName);
+				input = Thread.currentThread().getContextClassLoader().getResourceAsStream("templates" + File.separator + fileName);
 			}
 			Validate.notNull(input, "文件名【%s】的文件不存在", fileName);
 			try(OutputStream output = new FileOutputStream(file)){
