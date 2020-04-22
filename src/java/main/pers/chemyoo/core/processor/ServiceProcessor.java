@@ -38,7 +38,7 @@ public class ServiceProcessor extends AbstractProcessor {
 				out = source.openOutputStream();
 				EncodingUtils.transEcoding(out, generator.buildClass());
 			} catch (Exception e) {
-				LogWriter.error(e.getMessage());
+				LogWriter.error(e.getMessage(), e);
 			} finally {
 				IOUtils.closeQuietly(out);
 			}

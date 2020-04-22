@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JRootPane;
 import javax.swing.JWindow;
 
+import pers.chemyoo.core.logger.LogWriter;
+
 /**
  *  右下角弹出式提示框
  *  1.自动上升
@@ -101,7 +103,7 @@ public class TipMessage extends JWindow implements Runnable, MouseListener {
                 }
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
-            	e.printStackTrace();
+            	LogWriter.error(e.getMessage(), e);
                 Thread.currentThread().interrupt();
             }
         }
@@ -117,7 +119,7 @@ public class TipMessage extends JWindow implements Runnable, MouseListener {
                 }
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
-            	e.printStackTrace();
+            	LogWriter.error(e.getMessage(), e);
                 Thread.currentThread().interrupt();
             }
         }
@@ -153,7 +155,11 @@ public class TipMessage extends JWindow implements Runnable, MouseListener {
 	}
 	
 	public static void main(String[] args) {
-		new TipMessage("fasdfjao喝咖啡或打算fasdfjao喝咖啡或打算fasdfjao喝咖啡或打算fasdfjao喝咖啡或打算fasdfjao喝咖啡或打算");
+		showMsg("fasdfjao喝咖啡或打算fasdfjao喝咖啡或打算fasdfjao喝咖啡或打算fasdfjao喝咖啡或打算fasdfjao喝咖啡或打算");
+	}
+	
+	public static void showMsg(String message) {
+		new TipMessage(message);
 	}
 	
 }

@@ -12,15 +12,18 @@ public class LogWriter {
 	
 	private static String path = System.getProperty("user.dir");
 	
+	private static final String LOG_FOLDER = path + File.separator + "logs" + File.separator;
+	
 	public static void write(String text) {
 		LogWriter.writeline(text, true);
 	}
 	
 	public static void writeline(String text, boolean newLine) {
+		createLogFolder();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		String date = format.format(calendar.getTime());
-		try (FileWriter writer = new FileWriter(path + File.separator + "logs" + File.separator + date + "errorLog.log", true)) {
+		try (FileWriter writer = new FileWriter(LOG_FOLDER + "errorLog" + date + ".log", true)) {
 			ZoneOffset offset = ZoneOffset.ofHours(8);
 			writer.write(calendar.getTime().toInstant().atOffset(offset) + " -> ");
 			if(newLine) {
@@ -30,6 +33,13 @@ public class LogWriter {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private static void createLogFolder() {
+		File file = new File(LOG_FOLDER);
+		if(!file.exists()) {
+			file.mkdirs();
 		}
 	}
 	

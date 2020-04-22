@@ -15,6 +15,8 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.Maps;
 
+import pers.chemyoo.core.logger.LogWriter;
+
 public final class FileReader {
 	
 	private FileReader() {
@@ -26,13 +28,20 @@ public final class FileReader {
 	
 	private static final File TEMPLATES_FOLDER = new File(InitSystemConfig.WORK_SPACE, File.separator + "templates" + File.separator);
 	
+	private static void createLogFolder(File folder) {
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+	}
+	
 	public static String read(String fileName) throws IOException {
 		Validate.notBlank(fileName, "fileName不能为空");
 		File file = new File(TEMPLATES_FOLDER, fileName);
 		if(!file.exists()) {
+			createLogFolder(TEMPLATES_FOLDER);
 			// 文件不存在，就从jar包中拷贝出去
 			InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(File.separator + "templates" + File.separator + fileName);
-			Validate.notNull(input, "文件名【%s】的文件不存在", fileName);
+			LogWriter.info(FileReader.class, "文件名【%s】的文件不存在", fileName);
 			try(OutputStream output = new FileOutputStream(file)){
 				IOUtils.copy(input, output);
 			} 
