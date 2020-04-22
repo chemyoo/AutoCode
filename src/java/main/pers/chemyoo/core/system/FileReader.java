@@ -53,7 +53,7 @@ public final class FileReader {
 		long version = file.lastModified();
 		String key = DigestUtils.md5Hex(fileName);
 		if(MAP_CACHE.containsKey(key) && VERSION_CACHE.get(key) == version) {
-			return MAP_CACHE.get(fileName);
+			return MAP_CACHE.get(key);
 		}
 		String encoding = InitSystemConfig.getInstance().getProperty("used.file.encoding", Charset.defaultCharset().displayName());
 		MAP_CACHE.put(key, FileUtils.readFileToString(file, encoding));
