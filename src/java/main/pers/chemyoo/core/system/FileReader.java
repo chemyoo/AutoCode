@@ -31,18 +31,20 @@ public final class FileReader {
 			folder.mkdirs();
 		}
 	}
-	// TODO 没有从jar中找到模板文件
+	
+	/**
+	 * 此处在window下只能用‘/’
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 */
 	public static String read(String fileName) throws IOException {
 		Validate.notBlank(fileName, "fileName不能为空");
 		File file = new File(TEMPLATES_FOLDER, fileName);
 		if(!file.exists()) {
 			createLogFolder(TEMPLATES_FOLDER);
 			// 文件不存在，就从jar包中拷贝出去
-//			TipMessage.showMsg(Thread.currentThread().getContextClassLoader());
-			InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(File.separator + "templates" + File.separator + fileName);
-			if(input == null) {
-				input = Thread.currentThread().getContextClassLoader().getResourceAsStream("templates" + File.separator + fileName);
-			}
+			InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("templates/" + fileName);
 			Validate.notNull(input, "文件名【%s】的文件不存在", fileName);
 			try(OutputStream output = new FileOutputStream(file)){
 				IOUtils.copy(input, output);
