@@ -1,9 +1,13 @@
 package pers.chemyoo.core.system;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class CoderUtils
@@ -171,7 +175,7 @@ public class CoderUtils
 					char first = unicode.charAt(0);
 					if (first == 'u')
 					{
-						for (int i = 1, len = unicode.length(); i < len; i++)
+						for (int i = 1; i < 5; i++)
 						{
 							char c = unicode.charAt(i);
 							switch (c)
@@ -205,7 +209,7 @@ public class CoderUtils
 								value = (value << 4) + 10 + c - 'A';
 								break;
 							default:
-								throw new IllegalArgumentException("Malformed   \\uxxxx   encoding.");
+								throw new IllegalArgumentException("Malformed   \\uxxxx   encoding." + unicode);
 							}
 						}
 						outBuffer.append((char) value);
@@ -214,20 +218,29 @@ public class CoderUtils
 						if (first == 't')
 						{
 							first = '\t';
+							outBuffer.append(first);
 						}
 						else if (first == 'r')
 						{
 							first = '\r';
+							outBuffer.append(first);
 						}
 						else if (first == 'n')
 						{
 							first = '\n';
+							outBuffer.append(first);
 						}
 						else if (first == 'f')
 						{
 							first = '\f';
+							outBuffer.append(first);
+						} else {
+							outBuffer.append(unicode);
 						}
-						outBuffer.append(first);
+						
+					}
+					if(unicode.length() > 5) {
+						outBuffer.append(unicode.substring(5));
 					}
 				}
 			}
@@ -236,16 +249,28 @@ public class CoderUtils
 		return StringUtils.EMPTY;
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
-		String s = "abc单反发达既非中中中";
-		String unicode = CoderUtils.stringToUnicode(s);
-		String utf = CoderUtils.convertStringToUTF8(s);
-		String str = CoderUtils.convertUTF8ToString(utf);
-		System.err.println(unicode);
-		System.err.println(utf);
-		System.err.println(str);
-		System.err.println(CoderUtils.unicodeToUtf8(unicode));
+//		String s = "abc单反发达既非中中中";
+//		String unicode = CoderUtils.stringToUnicode(s);
+//		String utf = CoderUtils.convertStringToUTF8(s);
+//		String str = CoderUtils.convertUTF8ToString(utf);
+//		System.err.println(unicode);
+//		System.err.println(utf);
+//		System.err.println(str);
+		
+		List<String> lines = FileUtils.readLines(new File("D:\\software\\eclipse\\workspace\\hnzljdxxh\\bwopt\\booway\\hnzljdxxh", "application.yml"), "utf-8");
+		for(String line : lines) {
+			if(line.trim().startsWith("#")) {
+				String t = line.trim().replace("#", "").trim();
+				if(t.contains("\\u")) {
+					System.err.println(CoderUtils.unicodeToUtf8(t));
+				} else {
+					System.err.println(t);
+				}
+			}
+		}
+		
 	}
 
 }
