@@ -148,6 +148,7 @@ public class EncodingUtils {
 		} else {
 			out.write(text.getBytes(charset));
 		}
+		out.flush();
 	}
 
 }
